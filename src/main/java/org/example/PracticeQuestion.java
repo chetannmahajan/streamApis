@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Function;
@@ -12,10 +13,16 @@ public class PracticeQuestion {
 
     public static void main(String[] args) {
 
+        String s3 = "helloThere/auth-callback".split("/auth-callback")[0];
+        System.out.println(s3);
+
+        System.out.println("----------------------------------");
+
         //1) Given a list of integers, separate odd and even numbers?
         int[] array = {71, 18, 42, 21, 67, 32, 95, 14, 56, 87};
 
         Map<Boolean, List<Integer>> collect = Arrays.stream(array).boxed().collect(Collectors.partitioningBy(i -> i % 2 == 0));
+
 
         System.out.println("even elements");
         collect.get(true).forEach(i -> System.out.println(i));
@@ -27,6 +34,7 @@ public class PracticeQuestion {
         //2) How do you remove duplicate elements from a list using Java 8 streams?
 
         List<String> listOfStrings = Arrays.asList("Java", "Python", "C#", "Java", "Kotlin", "Python");
+
         String[] strArry = {"Java", "Python", "C#", "Java", "Kotlin", "Python"};
 
         Arrays.stream(strArry).distinct().collect(Collectors.toList()).forEach(str -> System.out.println(str));
@@ -36,12 +44,13 @@ public class PracticeQuestion {
 
         System.out.println("after line 33");
         String inputString = "Java Concept Of The Day";
-
         inputString.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(c -> c, Collectors.counting())).forEach((k,v) -> System.out.println(k+" "+v));
 
         //4) How do you find frequency of each element in an array or a list?
 
         List<String> stationeryList = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Stapler", "Note Book", "Pencil");
+        stationeryList.stream().collect(Collectors.groupingBy(string -> string, Collectors.counting())).entrySet().forEach(System.out::println);
+
 
 
         System.out.println("After line 42");
@@ -79,7 +88,13 @@ public class PracticeQuestion {
         //8) Given a list of integers, find maximum and minimum of those numbers?
         List<Integer> listOfIntegers1 = Arrays.asList(45, 12, 56, 15, 24, 75, 31, 89);
 
-        System.out.println("after line 82");
+        // Finding minimum using Stream
+        Optional<Integer> min1 = listOfIntegers.stream()
+                .min(Integer::compare);
+
+        // Finding maximum using Stream
+        Optional<Integer> max1 = listOfIntegers.stream()
+                .max(Integer::compare);
 
         Integer min = listOfIntegers1.stream().min(Comparator.comparing(Function.identity())).get();
         System.out.println(min);
@@ -94,7 +109,6 @@ public class PracticeQuestion {
         int[] a = new int[] {4, 2, 7, 1};
 
         int[] b = new int[] {8, 3, 9, 5};
-
 
         IntStream.concat(Arrays.stream(a), Arrays.stream(b));
 
@@ -146,7 +160,6 @@ public class PracticeQuestion {
         //15) Given a list of strings, sort them according to increasing order of their length?
 
         List<String> listOfStrings2 = Arrays.asList("Java", "Python", "C#", "HTML", "Kotlin", "C++", "COBOL", "C");
-
         listOfStrings2.stream().sorted(Comparator.comparing(currentString -> currentString.length())).forEach(some -> System.out.println(some));
 
         System.out.println("online 130");
@@ -166,14 +179,12 @@ public class PracticeQuestion {
         List<Integer> list1 = Arrays.asList(71, 21, 34, 89, 56, 28);
 
         List<Integer> list2 = Arrays.asList(12, 56, 17, 21, 94, 34);
-
         list1.stream().filter(list2::contains).collect(Collectors.toList()).forEach(newInt -> System.out.println(newInt));
 
         System.out.println("after line 152");
         //18)Reverse each word of a string using Java 8 streams?
         String string = "Java Concept Of The Day";
         String[] s2 = string.split(" ");
-
 
         Arrays.stream(string.split(" ")).map(element -> new StringBuffer(element).reverse()).forEach(e-> System.out.println(e));
 
@@ -186,7 +197,6 @@ public class PracticeQuestion {
         System.out.println("after line 162");
         //22) How do you find the most repeated element in an array?
         List<String> listOfString = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Pen", "Note Book", "Pencil");
-
         Map<String, Long> collect3 = listOfString.stream().collect(Collectors.groupingBy(word -> word, Collectors.counting()));
         System.out.println(collect3);
 
@@ -213,7 +223,7 @@ public class PracticeQuestion {
 
 
         //*Practice find the second most occuring character in a string
-        String string1 = "Java Concept Of The Day";
+        String string1 = "This is interview meeting for Prateek!";
         String key = Arrays.stream(string1.split("")).collect(Collectors.groupingBy(charecter -> charecter.toString(), LinkedHashMap::new, Collectors.counting()))
                 .entrySet().stream().filter(character -> character.getValue() > 1).findFirst().get().getKey();
 

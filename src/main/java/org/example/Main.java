@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) {
 
         //a)Create a List and filter all even numbers from list
-
         List<Integer> integersList = List.of(2,4,50,21,22,67);
 
         //Without stream
