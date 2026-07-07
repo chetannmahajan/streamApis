@@ -8,10 +8,14 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PracticeQuestion {
 
     public static void main(String[] args) {
+
+        Set
 
         String s3 = "helloThere/auth-callback".split("/auth-callback")[0];
         System.out.println(s3);
@@ -20,9 +24,10 @@ public class PracticeQuestion {
 
         //1) Given a list of integers, separate odd and even numbers?
         int[] array = {71, 18, 42, 21, 67, 32, 95, 14, 56, 87};
+        Arrays.stream(array).boxed().collect(Collectors.partitioningBy(i -> i%2 == 0));
 
         Map<Boolean, List<Integer>> collect = Arrays.stream(array).boxed().collect(Collectors.partitioningBy(i -> i % 2 == 0));
-
+        collect.entrySet().stream().filter(entry -> entry.getKey().equals(true)).toList();
 
         System.out.println("even elements");
         collect.get(true).forEach(i -> System.out.println(i));
@@ -35,6 +40,8 @@ public class PracticeQuestion {
 
         List<String> listOfStrings = Arrays.asList("Java", "Python", "C#", "Java", "Kotlin", "Python");
 
+        listOfStrings.stream().distinct().collect(Collectors.toList());
+
         String[] strArry = {"Java", "Python", "C#", "Java", "Kotlin", "Python"};
 
         Arrays.stream(strArry).distinct().collect(Collectors.toList()).forEach(str -> System.out.println(str));
@@ -43,15 +50,31 @@ public class PracticeQuestion {
         //3) How do you find frequency of each character in a string using Java 8 streams?
 
         System.out.println("after line 33");
-        String inputString = "Java Concept Of The Day";
+        String inputString = "This is interview for Nisha";
+        Map<String, Long> collect7 = Arrays.stream(inputString.split(" \\s+"))
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        System.out.println("output after line 54");
+        System.out.println(collect7);
+
+        IntStream chars = inputString.chars();
+        chars.forEach(c -> System.out.println(c));
+
+        Map<Character, Long> map = inputString.chars().mapToObj(c -> (char) c)
+        .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+
         inputString.chars().mapToObj(c -> (char) c).collect(Collectors.groupingBy(c -> c, Collectors.counting())).forEach((k,v) -> System.out.println(k+" "+v));
 
         //4) How do you find frequency of each element in an array or a list?
 
         List<String> stationeryList = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Stapler", "Note Book", "Pencil");
-        stationeryList.stream().collect(Collectors.groupingBy(string -> string, Collectors.counting())).entrySet().forEach(System.out::println);
+        System.out.println("after line 60");
+        stationeryList.stream().collect(Collectors.groupingBy(string -> string, Collectors.counting()))
+                .forEach((k,v) -> System.out.println(k+" "+v));
 
-
+        Set<Map.Entry<String, Long>> entries = stationeryList.stream()
+                .collect(Collectors.groupingBy(string -> string, Collectors.counting()))
+                .entrySet();
+        entries.forEach(System.out::println);
 
         System.out.println("After line 42");
         String[] str = {"Pen", "Eraser", "Note Book", "Pen", "Pencil", "Stapler", "Note Book", "Pencil"};
@@ -61,6 +84,7 @@ public class PracticeQuestion {
 
         System.out.println("After line 48");
         List<Double> decimalList = Arrays.asList(12.45, 23.58, 17.13, 42.89, 33.78, 71.85, 56.98, 21.12);
+        decimalList.stream().sorted(Comparator.reverseOrder()).forEach(e -> System.out.println(e));
 
         decimalList.stream().sorted(Comparator.reverseOrder()).forEach(e -> System.out.println(e));
 
@@ -69,6 +93,8 @@ public class PracticeQuestion {
         System.out.println("after line 53");
         //6) Given a list of strings, join the strings with ‘[‘ as prefix, ‘]’ as suffix and ‘,’ as delimiter?
         List<String> listOfStrings1 = Arrays.asList("Facebook", "Twitter", "YouTube", "WhatsApp", "LinkedIn");
+        System.out.println(listOfStrings1.stream().collect(Collectors.joining(",", "[", "]")));
+
 
         String collect1 = listOfStrings1.stream().collect(Collectors.joining(",", "[", "]"));
         System.out.println(collect1);
@@ -78,6 +104,8 @@ public class PracticeQuestion {
         //7) From the given list of integers, print the numbers which are multiples of 5?
         List<Integer> listOfIntegers = Arrays.asList(45, 12, 56, 15, 24, 75, 31, 89);
         int[] intArray = {45, 12, 56, 15, 24, 75, 31, 89};
+        System.out.println("after line 97");
+        Arrays.stream(intArray).mapToObj(i -> (Integer) i).filter(i -> i%5 == 0).toList().forEach(i -> System.out.println(i));
         System.out.println("online 71");
         listOfIntegers.stream().sorted();
 
@@ -88,9 +116,12 @@ public class PracticeQuestion {
         //8) Given a list of integers, find maximum and minimum of those numbers?
         List<Integer> listOfIntegers1 = Arrays.asList(45, 12, 56, 15, 24, 75, 31, 89);
 
+
         // Finding minimum using Stream
-        Optional<Integer> min1 = listOfIntegers.stream()
-                .min(Integer::compare);
+        Optional<Integer> min1 = listOfIntegers.stream().reduce((a,b) -> Integer.min(a,b));
+//                .min(Integer::compare);
+
+        System.out.println(min1);
 
         // Finding maximum using Stream
         Optional<Integer> max1 = listOfIntegers.stream()
@@ -135,7 +166,18 @@ public class PracticeQuestion {
         Arrays.stream(ArrayInteger).boxed().sorted(Comparator.reverseOrder()).limit(3).forEach(i -> System.out.println(i));
 
         //12) Java 8 program to check if two strings are anagrams or not?
+        String s1 = "anagram";
+        String t = "nagaram";
+        char[] charArray = s1.toCharArray();
+        Arrays.sort(charArray);
 
+        s1.chars().mapToObj(c -> (char) c);
+        System.out.println("after line 163");
+
+        s3.chars().sorted().mapToObj(c -> (char) c)
+                .map(String::valueOf).collect(Collectors.joining())
+                .equals(t.chars().sorted().mapToObj(c -> (char) c).map(String::valueOf)
+                        .collect(Collectors.joining()));
 
         System.out.println("after line 110");
         //13) Find sum of all digits of a number in Java 8?
@@ -143,7 +185,7 @@ public class PracticeQuestion {
         String s = Integer.toString(i);
         Arrays.stream(s.split(""));
 
-        int sum = Arrays.stream(String.valueOf(i).split("")).mapToInt(number -> Integer.parseInt(number)).sum();
+        int sum = Arrays.stream(String.valueOf(i).split("")).mapToInt(Integer::parseInt).sum();
         System.out.println(sum);
 
         System.out.println("after line 116");
@@ -160,12 +202,20 @@ public class PracticeQuestion {
         //15) Given a list of strings, sort them according to increasing order of their length?
 
         List<String> listOfStrings2 = Arrays.asList("Java", "Python", "C#", "HTML", "Kotlin", "C++", "COBOL", "C");
+
+        listOfStrings2.stream().sorted(Comparator.comparing(String::length)).forEach(string -> System.out.println(string));
+
         listOfStrings2.stream().sorted(Comparator.comparing(currentString -> currentString.length())).forEach(some -> System.out.println(some));
 
         System.out.println("online 130");
         //16) Given an integer array, find sum and average of all elements?
 
         int[] integerArray = new int[] {45, 12, 56, 15, 24, 75, 31, 89};
+
+        Arrays.stream(integerArray).sum();
+
+
+
 
         int sum1 = Arrays.stream(integerArray).sum();
         System.out.println("sum is sum1:"+sum1);
@@ -179,11 +229,15 @@ public class PracticeQuestion {
         List<Integer> list1 = Arrays.asList(71, 21, 34, 89, 56, 28);
 
         List<Integer> list2 = Arrays.asList(12, 56, 17, 21, 94, 34);
+
+        list1.stream().filter(element -> list2.contains(element)).forEach(p -> System.out.println(p));
+
         list1.stream().filter(list2::contains).collect(Collectors.toList()).forEach(newInt -> System.out.println(newInt));
 
         System.out.println("after line 152");
         //18)Reverse each word of a string using Java 8 streams?
         String string = "Java Concept Of The Day";
+        System.out.println(Arrays.stream(string.split(" ")).map(element1 -> new StringBuilder(element1).reverse()).collect(Collectors.joining(" ")));
         String[] s2 = string.split(" ");
 
         Arrays.stream(string.split(" ")).map(element -> new StringBuffer(element).reverse()).forEach(e-> System.out.println(e));
@@ -197,6 +251,12 @@ public class PracticeQuestion {
         System.out.println("after line 162");
         //22) How do you find the most repeated element in an array?
         List<String> listOfString = Arrays.asList("Pen", "Eraser", "Note Book", "Pen", "Pencil", "Pen", "Note Book", "Pencil");
+
+
+        Map<String, Long> collect5 = listOfString.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        collect5.values().stream().max(Comparator.comparing(Function.identity()));
+
+
         Map<String, Long> collect3 = listOfString.stream().collect(Collectors.groupingBy(word -> word, Collectors.counting()));
         System.out.println(collect3);
 
@@ -204,15 +264,20 @@ public class PracticeQuestion {
         System.out.println("max value is:"+stringLongEntry);
 
 
-        //27) Find first repeated character in a string?
+        //Find first repeated character in a string?
 
         String inputString1 = "Java Concept Of The Day";
         String[] split = inputString1.split("");
 
-        String s1 = Arrays.stream(inputString1.split("")).collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+        LinkedHashMap<String, Long> collect6 = Arrays.stream(inputString1.split(""))
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new,
+                        Collectors.counting()));
+        collect6.entrySet().stream().filter(e -> e.getValue() > 1);
+
+        String s21 = Arrays.stream(inputString1.split("")).collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
                 .entrySet().stream().filter(e -> e.getValue() > 1).findFirst().map(e -> e.getKey()).get();
 
-        System.out.println(s1);
+        System.out.println(s21);
 
 
         System.out.println("online 185");
@@ -222,10 +287,12 @@ public class PracticeQuestion {
         listOfStringss.stream().skip(listOfStringss.size() - 1).collect(Collectors.toList()).forEach(e -> System.out.println(e));
 
 
-        //*Practice find the second most occuring character in a string
-        String string1 = "This is interview meeting for Prateek!";
+        //*Practice // find the second most occuring character in a string
+        String string1 = "This is interview meeting for Palaka!".replaceAll(" ", "");
         String key = Arrays.stream(string1.split("")).collect(Collectors.groupingBy(charecter -> charecter.toString(), LinkedHashMap::new, Collectors.counting()))
-                .entrySet().stream().filter(character -> character.getValue() > 1).findFirst().get().getKey();
+                .entrySet().stream().filter(character -> character.getValue() > 1).skip(1).findFirst().get().getKey();
+
+        System.out.println("key is: "+key);
 
         System.out.println("after line 213");
         Arrays.stream(string1.split("")).collect(Collectors.groupingBy(charecter -> charecter.toString(), LinkedHashMap::new, Collectors.counting()))
@@ -241,6 +308,9 @@ public class PracticeQuestion {
         //largest number possible using these string
 
         int[] inputArray = {8,6,0,4,6,4,2,7};
+        Arrays.stream(inputArray)
+                .sorted().distinct().boxed().mapToInt(Integer::intValue)
+                .toArray();
         Arrays.stream(inputArray).boxed().sorted(Collections.reverseOrder()).forEach(sys -> System.out.print(sys));
 
         System.out.println("after line 253");
@@ -250,15 +320,24 @@ public class PracticeQuestion {
         System.out.println(myStr.replaceAll("[aeiouAEIOU]",""));
 
         System.out.println("after line 241");
+
         //remove vowels from string using streams;
 
         String myString = "GeeeksforGeeks - A Computer Science Portal for Geeks";
+        System.out.println(Arrays.stream(myString.split("")).filter(c -> !Objects.equals(c, "a") && !"e".equals(c) && !"i".equals(c) && !"o".equals(c) && !"u".equals(c))
+                .collect(Collectors.joining()));
+        System.out.println("after line 311");
         String collect4 = myString.chars().mapToObj(c -> (char) c).filter(c -> c!='a' & c!='e' & c!='i' & c!='o' & c!='u')
                 .map(c -> c.toString())
                 .collect(Collectors.joining());
         System.out.println(collect4);
 
 
+        int[] input1 = new int[]{12, 35, 1, 10, 34, 1};
+
+        OptionalInt first = Arrays.stream(input1)
+                .sorted().distinct().skip(1).findFirst();
+        System.out.println("online 322: "+first);
 
 
 //        findWordsContaining(new String[]{"leet", "code"},'e');
@@ -277,6 +356,24 @@ public class PracticeQuestion {
         int isf = 0;
         Integer sfds = 0;
 
+        System.out.println("after line 283");
+        String input = "<a href=\"https://forms.daiwausa.com/user/event/2409a29f1bfd01032f1044c0_1759235882\" target=\"_blank\" >FI30437</a>";
+
+        // Regex to match the URL inside href=""
+        Pattern pattern = Pattern.compile("href\\s*=\\s*\"(https?://[^\"]+)\"");
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            System.out.println("matcher: "+matcher);
+            System.out.println("group(0): "+matcher.group(0));
+            String url = matcher.group(1); // Group 1 contains the URL
+            System.out.println("Extracted URL: " + url);
+        } else {
+            System.out.println("No URL found.");
+        }
+        System.out.println("after line 292");
+
+        findFrequentElement();
     }
 
     public static int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
@@ -337,4 +434,44 @@ public class PracticeQuestion {
 
         return newList;
     }
+
+    public static void findFrequentElement(){
+        int k =2;
+        int[] nums = new int[]{1,1,1,1,2,2,3,3,4};
+        HashMap<Integer, Integer> numsFrequencies = new HashMap();
+        for(int i=0; i<nums.length; i++){
+            if(!numsFrequencies.containsKey(nums[i])){
+                numsFrequencies.put(nums[i], 1);
+            }else{
+                Integer frequency = numsFrequencies.get(nums[i]);
+                numsFrequencies.put(nums[i], frequency+1);
+            }
+        }
+
+        numsFrequencies.forEach((key,v) -> System.out.println("key: "+key+" value:"+v));
+        System.out.println("after line 437");
+//        List<Map.Entry<Integer, Integer>> list =
+        Map<Integer, Long> collect = numsFrequencies.entrySet().stream()
+                .collect(Collectors.groupingBy(entry -> entry.getKey(), Collectors.counting()));
+        collect.forEach((key,value) -> System.out.println("key"+key+"value:"+value));
+//                        .filter(entry -> entry.getKey() >= k)
+//                .toList().stream().mapToInt(mapObj -> Integer.valueOf(mapObj.getKey()));
+//        list.forEach(System.out::println);
+//                .mapToInt(Integer::intValue).toArray();
+    }
+
+
+    public String longestCommonPrefix(String[] strs) {
+        for(int i=0; i<strs[0].length(); i++){
+            String subString = "";
+            for(int j=0; j<strs.length; j++){
+                subString = strs[0].substring(0,i);
+                if(strs[j].length() < strs[0].substring(0,i).length() || !strs[j].contains(strs[0].substring(0,i))){
+                    return subString.substring(0,i-1);
+                }
+            }
+        }
+        return "null";
+    }
+
 }

@@ -12,7 +12,7 @@ public class Main {
 
         //a)Create a List and filter all even numbers from list
         List<Integer> integersList = List.of(2,4,50,21,22,67);
-
+        integersList.forEach(i -> {});
         //Without stream
         List<Integer> listEven = new ArrayList<>();
 
@@ -44,9 +44,9 @@ public class Main {
 
         List<Employee> employeesList = new ArrayList<>();
         employeesList.add(new Employee("Chetan Mahajan", "sadf234", "Pune"));
-        employeesList.add(new Employee("Rahul khod","asdfasf2w34","Pune"));
-        employeesList.add(new Employee("Nikhil Patil", "dfas234","Mumbai"));
-        employeesList.add(new Employee("Gitesh Patil","asdf23", "Banglore"));
+        employeesList.add(new Employee("Rahul Jadhav","asdfasf2w34","Pune"));
+        employeesList.add(new Employee("Nikhil Rameshwar", "dfas234","Mumbai"));
+        employeesList.add(new Employee("Gitesh shah","asdf23", "Banglore"));
         employeesList.add(new Employee("Hello world", "2we4", "Delhi"));
 
         //convert list to map
@@ -69,7 +69,7 @@ public class Main {
         System.out.println(multipliedIntegerArray.get());
 
 
-        String inputString = "ilovejavatechie";
+        String inputString = "ThisisInterviewProcessforSushilLahade";
         System.out.println("online 73");
         Map<Character, Long> collect = inputString.chars().mapToObj(i -> (char) i).collect(Collectors.groupingBy(c -> c, Collectors.counting()));
         collect.entrySet().stream().filter(i -> i.getValue()>=2).map(x -> x.getKey()).forEach(k -> System.out.println(k));
