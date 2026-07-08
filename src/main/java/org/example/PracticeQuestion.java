@@ -15,9 +15,10 @@ public class PracticeQuestion {
 
     public static void main(String[] args) {
 
-        Set
-
         String s3 = "helloThere/auth-callback".split("/auth-callback")[0];
+        System.out.println(s3.indexOf("There"));
+//        "helloThere/auth-callback".substring(0,s3.indexOf("a"));
+
         System.out.println(s3);
 
         System.out.println("----------------------------------");
